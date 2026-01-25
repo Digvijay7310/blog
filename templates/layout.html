@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django Blog</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .scrolling::-webkit-scrollbar{
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="w-full bg-white shadow px-2 py-3 md:px-40 flex justify-between items-center gap-4 sticky top-0 left-0">
+        <div class="font-bold text-2xl underline">Blog<span class="font-extrabold text-red-600">ify</span></div>
+        <!-- Navbar -->
+    <nav class="p-4 flex gap-4 justify-center overflow-x-auto scrolling">
+        {% for cat in categories %}
+            <a href="{% url 'posts_by_category' cat.id %}" class="text-sm font-medium hover:text-blue-600">
+                {{ cat.category_name }}
+            </a>
+        {% endfor %}
+    </nav>
+    </header>
+
+    <!-- Main content -->
+    <main class="max-w-5xl mx-auto px-4 py-6">
+        {% block content %}{% endblock %}
+    </main>
+
+</body>
+</html>
