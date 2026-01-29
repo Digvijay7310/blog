@@ -1,9 +1,60 @@
 {% extends "layout.html" %}
-
 {% block content %}
-  <div>
-    <p>{{blog.title}}</p>
-  <p>{{blog.description}}</p>
-  </div>
+
+<section class="max-w-6xl mx-auto mt-6 px-2 sm:px-4">
+
+    <div class="flex flex-col lg:flex-row gap-8">
+
+        <!-- MAIN BLOG -->
+        <main class="flex-1">
+            <!-- category / title / image / body -->
+            <h1 class="text-2xl md:text-4xl font-bold mb-4">{{ post.title }}</h1>
+
+            {% if post.featured_image %}
+            <img src="{{ post.featured_image.url }}"
+                 class="w-full h-64 md:h-96 object-cover rounded mb-6">
+            {% endif %}
+
+            <article class="prose max-w-none">
+                {{ post.blog_body|safe }}
+            </article>
+        </main>
+
+        <!-- SIDEBAR (right on large, bottom on mobile) -->
+        <aside class="w-full lg:w-80">
+
+            <h3 class="text-lg font-bold mb-4 border-b pb-2">
+                Related Posts
+            </h3>
+
+            <div class="flex flex-col gap-4">
+                {% for rp in related_posts %}
+                <a href="{% url 'blog_detail' rp.slug %}"
+                   class="flex gap-3 group">
+
+                    {% if rp.featured_image %}
+                    <img src="{{ rp.featured_image.url }}"
+                         class="w-20 h-16 object-cover rounded">
+                    {% endif %}
+
+                    <div>
+                        <p class="text-sm font-semibold group-hover:text-red-600 line-clamp-2">
+                            {{ rp.title }}
+                        </p>
+                        <p class="text-xs text-gray-500">
+                            {{ rp.created_at|timesince }} ago
+                        </p>
+                    </div>
+                </a>
+                {% empty %}
+                <p class="text-sm text-gray-500">No related posts found.</p>
+                {% endfor %}
+            </div>
+
+        </aside>
+
+    </div>
+
+</section>
 
 {% endblock %}

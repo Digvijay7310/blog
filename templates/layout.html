@@ -16,7 +16,7 @@
 <body class="bg-gray-50 text-gray-800">
 
     <header class="w-full bg-white shadow px-2 py-3 lg:px-40 flex justify-between items-center gap-4 sticky top-0 left-0">
-        <a href="/" class="font-bold text-sm sm:text-xl md:text-2xl underline">Blog<span class="font-extrabold text-red-600">ify</span></a>
+        <a href="/" class="font-bold text-lg sm:text-xl md:text-2xl underline">Blog<span class="font-extrabold text-red-600">ify</span></a>
         
         <form method="POST" class="max-w-5xl w-[50%] flex items-center rounded border border-r-0">
             <input type="text" placeholder="Search here" class="w-full text-xs sm:text-sm md:text-md p-2 rounded outline-0 border-0">
@@ -27,7 +27,7 @@
     
     </header>
     <!-- Navbar -->
-     <nav class="md:mx-30 bg-white flex flex-col gap-5 p-2 w-40  border absolute top-15 right-1 rounded navbar hidden">
+     <nav class="md:mx-30 bg-white flex-col gap-5 p-2 w-60  border absolute top-15 right-1 rounded navbar hidden">
         <a href="#" class="font-semibold transition-all duration-200 hover:text-red-700 hover:translate-x-2 hover:underline">Account</a>
         <a href="#" class="font-semibold transition-all duration-200 hover:text-red-700 hover:translate-x-2 hover:underline">My Blogs</a>
         <a href="#" class="font-semibold transition-all duration-200 hover:text-red-700 hover:translate-x-2 hover:underline">Logout</a>
@@ -61,6 +61,7 @@
         menBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             navbar.classList.toggle('hidden')
+            navbar.classList.toggle('flex')
         })
 
         navbar.addEventListener('click', (e) => {
