@@ -2,15 +2,19 @@
 
 {% block content %}
 
-<h1 class="text-2xl font-bold mb-6 text-center">Posts in {{ category.category_name }}</h1>
+<h1 class="text-2xl font-bold mb-6 text-center">Posts in <span class="text-red-600">{{ category.category_name }}</span></h1>
 
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
     {% for post in posts %}
-    <div class="border rounded bg-white shadow hover:shadow-lg transition">
-        <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="h-40 w-full object-cover rounded-t">
-        <div class="p-3">
-            <h2 class="font-semibold text-sm sm:text-lg mb-1">{{ post.title }}</h2>
-            <p class="text-xs text-gray-600">{{ post.short_description|truncatewords:20 }}</p>
+    <div class="border p-2 rounded bg-white shadow hover:shadow-lg transition">
+        <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="h-40 w-full object-cover rounded">
+        <div class="pt-3">
+            <h2 class="font-semibold text-[12px] mb-1 line-clamp-3">{{ post.title }}</h2>
+            <div class="flex justify-between gap-6">
+                <h4 class="text-gray-500 text-xs">{{post.author}}</h4>
+                <span class="text-gray-500 text-xs">{{post.created_at | timesince}}</span>
+            </div>
+            {% comment %} <p class="text-xs text-gray-600">{{ post.short_description|truncatewords:20 }}</p> {% endcomment %}
         </div>
     </div>
     {% empty %}
