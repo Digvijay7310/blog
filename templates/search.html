@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+
+{% block content %}
+  {% if blogs %}
+<h3 class="text-center font-semibold m-2">Search Term <span class="text-red-600">{{keyword}} </span></h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+    {% for blog in blogs %}
+    <a href={% url 'blog_detail' blog.slug %} class=" p-2 rounded bg-white shadow hover:shadow-lg transition">
+        {% if blog.featured_image %}
+        <img src="{{ blog.featured_image.url }}" alt="{{ blog.title|default:'Post Image' }}" class="h-40 w-full object-cover rounded">
+        {% else %}
+        <div class="h-40 w-full bg-gray-200 rounded flex items-center justify-center text-gray-500 text-xs">
+            No Image
+        </div>
+        {% endif %}
+
+        <div class="pt-3">
+            <h2 class="font-semibold text-xs mb-1 line-clamp-3">{{ blog.title|default:"Untitled Post" }}</h2>
+            <div class="flex justify-between gap-6">
+                <h4 class="text-gray-500 text-[10px]">{{ blog.author|default:"Unknown" }}</h4>
+                <span class="text-gray-500 text-[10px]">{{ blog.created_at|timesince|default:"N/A" }}</span>
+            </div>
+        </div>
+    </a>
+    {% empty %}
+    <p class="col-span-3 text-center text-red-600">No posts found in this category.</p>
+    {% endfor %}
+</div>
+
+{% endif %}
+{% endblock %}

@@ -2,23 +2,32 @@
 
 {% block content %}
 
-    
+{% if posts %}
+<h3 class="text-center font-semibold m-2">Blogs in <span class="text-red-600">{{posts.first.category.category_name}} </span></h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-2">
     {% for post in posts %}
-    <h1 class="text-2xl font-bold mb-6 text-center">Posts in <span class="text-red-600">{{ post.category.category_name }}</span></h1>
-   <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-     <div class="border p-2 rounded bg-white shadow hover:shadow-lg transition">
-        <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="h-40 w-full object-cover rounded">
+    <a href={% url 'blog_detail' post.slug %} class=" p-2 rounded bg-white shadow hover:shadow-lg transition">
+        {% if post.featured_image %}
+        <img src="{{ post.featured_image.url }}" alt="{{ post.title|default:'Post Image' }}" class="h-40 w-full object-cover rounded">
+        {% else %}
+        <div class="h-40 w-full bg-gray-200 rounded flex items-center justify-center text-gray-500 text-xs">
+            No Image
+        </div>
+        {% endif %}
+
         <div class="pt-3">
-            <h2 class="font-semibold text-[12px] mb-1 line-clamp-3">{{ post.title }}</h2>
+            <h2 class="font-semibold text-xs mb-1 line-clamp-3">{{ post.title|default:"Untitled Post" }}</h2>
             <div class="flex justify-between gap-6">
-                <h4 class="text-gray-500 text-xs">{{post.author}}</h4>
-                <span class="text-gray-500 text-xs">{{post.created_at | timesince}}</span>
+                <h4 class="text-gray-500 text-[10px]">{{ post.author|default:"Unknown" }}</h4>
+                <span class="text-gray-500 text-[10px]">{{ post.created_at|timesince|default:"N/A" }}</span>
             </div>
         </div>
-    </div>
-   </div>
+    </a>
     {% empty %}
-    <p class=" col-span-3 text-center text-red-600">No posts found in this category.</p>
+    <p class="col-span-3 text-center text-red-600">No posts found in this category.</p>
     {% endfor %}
+</div>
+
+{% endif %}
 
 {% endblock %}

@@ -1,128 +1,114 @@
 {% extends "layout.html" %}
 
-
 {% block content %}
-
 
 <!-- HERO FEATURED POST -->
 {% for post in featured_post %}
-{% if forloop.first %}
-<section class="mt-8 grid md:grid-cols-2 gap-6 items-center">
-    <img src="{{ post.featured_image.url }}"
-         alt="{{ post.title }}"
-         class="w-full h-72 md:h-96 object-contain aspect-video rounded">
+    {% if forloop.first %}
+    <section class="mt-8 grid md:grid-cols-2 gap-6 items-center">
 
-    <a href={% url 'blog_detail' post.slug %}>
-        <h1 class="text-xl md:text-3xl font-bold mb-3">{{ post.title }}</h1>
-        <p class="text-gray-600 mb-4">
-            {{ post.short_description|truncatewords:25 }}
-        </p>
-        <p class="text-sm text-gray-500">
-            {{ post.created_at|timesince }} ago
-        </p>
-    </a>
-</section>
-{% endif %}
+        {% if post.featured_image %}
+        <img src="{{ post.featured_image.url }}"
+             alt="{{ post.title|default:'Featured Post' }}"
+             class="w-full h-72 md:h-96 object-contain aspect-video rounded">
+        {% endif %}
+
+        {% if post.slug %}
+        <a href="{% url 'blog_detail' post.slug %}">
+            <h1 class="text-xl md:text-3xl font-bold mb-3">{{ post.title|default:"Untitled Post" }}</h1>
+            <p class="text-gray-600 mb-4">{{ post.short_description|default:"No description available."|truncatewords:25 }}</p>
+            <p class="text-sm text-gray-500">{{ post.created_at|timesince }} ago</p>
+        </a>
+        {% else %}
+        <div>
+            <h1 class="text-xl md:text-3xl font-bold mb-3">{{ post.title|default:"Untitled Post" }}</h1>
+            <p class="text-gray-600 mb-4">{{ post.short_description|default:"No description available."|truncatewords:25 }}</p>
+            <p class="text-sm text-gray-500">{{ post.created_at|timesince }} ago</p>
+        </div>
+        {% endif %}
+
+    </section>
+    {% endif %}
+{% empty %}
+<p class="text-red-600 text-center">No featured posts available.</p>
 {% endfor %}
 
 <!-- FEATURED POSTS -->
-<section class="mt-12">
+<section class="mt-12 px-4">
     <h2 class="text-2xl font-semibold mb-6">Featured Posts</h2>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Posts Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for post in featured_post %}
-        {% if not forloop.first and forloop.counter <= 3 %}
-        <div class="bg-white rounded-lg shadow hover:shadow-lg transition">
+            {% if not forloop.first and forloop.counter <= 3 %}
+            <div class="bg-white rounded-lg shadow hover:shadow-lg transition">
+                {% if post.slug %}
+                <a href="{% url 'blog_detail' post.slug %}" class="block p-4">
+                {% else %}
+                <div class="block p-4">
+                {% endif %}
 
-            <a href={% url 'blog_detail' post.slug %} class="p-4">
-                <h3 class="font-semibold text-lg mb-1">
-                    {{ post.title }}
-                </h3>
-                <p class="text-xs text-gray-500 mb-2 flex justify-between">
-                    <span class="font-semibold">
-                        {{ post.author }}
-                    </span>  {{ post.created_at|timesince }} ago
-                </p>
-                <p class="text-sm text-gray-600">
-                    {{ post.short_description|truncatewords:12 }}
-                </p>
-            </a>
-        </div>
-        {% endif %}
+                    <h3 class="font-semibold text-lg mb-1">{{ post.title|default:"Untitled Post" }}</h3>
+                    <p class="text-xs text-gray-500 mb-2 flex justify-between">
+                        <span class="font-semibold">{{ post.author|default:"Unknown" }}</span>
+                        {{ post.created_at|timesince }} ago
+                    </p>
+                    <p class="text-sm text-gray-600">
+                        {{ post.short_description|default:"No description available."|truncatewords:12 }}
+                    </p>
+
+                {% if post.slug %}
+                </a>
+                {% else %}
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        {% empty %}
+            <p class="text-red-600 text-center col-span-1 sm:col-span-2 lg:col-span-3">No featured posts available.</p>
         {% endfor %}
     </div>
+
+    <!-- Sidebar Categories -->
+    <div class="mt-8 bg-gray-50 p-4 rounded-lg w-full sm:w-60 flex flex-col">
+    <h3 class="font-semibold text-xl text-center mb-4">Categories</h3>
+    <div class="flex flex-col gap-2">
+        {% for cat in categories %}
+        <a href="{% url 'posts_by_category' cat.id %}"
+           class="font-semibold transform transition duration-200 hover:text-red-700 hover:translate-x-2 hover:underline">
+            {{ cat.category_name }}
+        </a>
+        {% empty %}
+        <p class="text-gray-500 text-sm text-center">No categories available.</p>
+        {% endfor %}
+    </div>
+</div>
+
 </section>
+
 
 <!-- RECENT BLOGS -->
 <section class="mt-12 mb-12">
     <h2 class="text-2xl font-semibold mb-6">Recent Blogs</h2>
-
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
         {% for post in posts %}
-            <div class="bg-white rounded-lg p-2 shadow hover:shadow-lg transition">
-            <img src="{{ post.featured_image.url }}"
-                 class="w-full h-36 md:h-50 object-cover rounded-lg">
+            <a href={% url 'blog_detail' post.slug%} class="bg-white rounded-lg p-2 shadow hover:shadow-lg transition">
+                {% if post.featured_image %}
+                <img src="{{ post.featured_image.url }}" class="w-full h-36 md:h-50 object-cover rounded-lg" alt="{{ post.title|default:'Post Image' }}">
+                {% endif %}
 
-            <div class="px-1 pt-1">
-                <h3 class="font-semibold text-xs md:text-sm mb-1">
-                    {{ post.title }}
-                </h3>
-                <p class="text-[10px] text-gray-500 flex justify-between gap-6 mb-2 mt-2">
-                    <span class="font-semibold">{{ post.author }}</span>  {{ post.created_at|timesince }} ago
-                </p>
-                {% comment %} <p class="text-xs text-gray-600">
-                    {{ post.short_description|truncatewords:15 }}
-                </p> {% endcomment %}
-            </div>
-        </div>
+                <div class="px-1 pt-1">
+                    <h3 class="font-semibold text-xs md:text-sm mb-1">{{ post.title|default:"Untitled Post" }}</h3>
+                    <p class="text-[10px] text-gray-500 flex justify-between gap-6 mb-2 mt-2">
+                        <span class="font-semibold">{{ post.author|default:"Unknown" }}</span>
+                        {{ post.created_at|timesince }} ago
+                    </p>
+                </div>
+            </a>
+        {% empty %}
+            <p class="text-red-600 col-span-2 text-center">No posts available.</p>
         {% endfor %}
     </div>
 </section>
-
-
-
-<div class="">
-    <h3 class="text-center font-bold text-lg md:text-xl">Blog Detail and related Blogs</h3>
-    <section class="flex flex-col md:flex-row gap-6">
-            <div class="bg-white p-1 md:p-5 flex-3 ">
-        <h2 class="font-bold text-sm md:text-lg">Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis deserunt commodi fugiat aspernatur magni! Consectetur reprehenderit aut ut earum veritatis repellat sint aspernatur autem tempora. Ex magnam recusandae quas ipsum.</h2>
-
-        <p class="text-xs font-semibold mt-3 md:text-sm italic">" Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat sint ipsum expedita assumenda, velit, corporis harum corrupti ab veritatis laudantium atque nemo sit distinctio est dignissimos aperiam pariatur ducimus eveniet?
-        Nulla labore eius dignissimos et modi maiores magnam voluptatem. Aliquid reiciendis odio dolor placeat eos deleniti dolorum doloribus optio quidem, sapiente nihil aperiam excepturi animi nostrum consequatur, vitae nemo ipsam? "</p>
-        <img src="343.jpg" alt="this is the image of title"
-        class="h-50 md:h-70 rounded mt-3 w-full aspect-video object-contain border"
-        >
-
-        <p class="text-sm mt-3 md:text-lg">Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi magnam ut veniam, id sed labore ab vitae aliquid vero omnis ea numquam dignissimos deserunt itaque quasi reprehenderit obcaecati soluta non.
-        Exercitationem quia molestias blanditiis neque facere, alias similique beatae quo enim? Vitae beatae delectus, labore veniam rerum ratione aut! Maxime, quod? Corporis iste praesentium, fugiat excepturi voluptates ex doloribus qui.
-        Doloribus cumque at laudantium possimus laborum ex officia nostrum odit! Dolorem quidem perspiciatis odit, rem aperiam cupiditate praesentium nulla vero qui, sapiente similique accusamus et architecto vel ullam facilis quisquam.
-        Nihil, autem tenetur? Veniam molestiae, quasi eum odit consequatur, nostrum inventore error ipsam similique suscipit officia omnis qui nesciunt delectus, autem asperiores illum id ex repellat eius. Ullam, labore sed.</p>
-    </div>
-    <aside class="bg-white p-1 flex-1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus laborum, optio suscipit similique dolores sequi vel qui doloremque voluptas corrupti fuga sapiente quam saepe animi cum omnis, in ducimus reprehenderit!
-    Nihil consequuntur optio possimus repudiandae, accusantium similique consequatur vel at fugiat voluptatibus officiis? Placeat itaque, fugit blanditiis quia doloribus quibusdam commodi omnis nobis dolor veniam! Incidunt ducimus nulla earum veritatis!
-    Atque molestias velit laborum. Quia, nam voluptatibus assumenda beatae eos cumque provident dolorum vel debitis! Aperiam excepturi, magni optio atque rem, praesentium necessitatibus, deserunt beatae maiores deleniti blanditiis nostrum reprehenderit?
-    Nam, quis quasi dolorem optio enim sapiente provident, temporibus magni rerum nisi qui consequatur minima quam adipisci esse incidunt blanditiis ipsa doloribus ex. Incidunt voluptas ullam ducimus illo ad. Voluptatum.
-    Tempora expedita ipsam aliquam! Architecto corporis ratione, repellendus dolore perferendis animi at autem aut libero velit dicta reprehenderit et eaque laboriosam explicabo maxime sint quibusdam est, id exercitationem doloremque? Asperiores.
-    Assumenda, architecto quam possimus unde distinctio quis provident ut sapiente laborum quos sit fuga! Itaque quos eligendi incidunt vel veritatis, aut quibusdam amet velit officiis fugit, nihil perspiciatis placeat a?
-    Earum quibusdam amet cupiditate nobis fugit consectetur alias illum, ullam eum, architecto temporibus pariatur aut aspernatur cumque soluta laborum maxime voluptas, minus molestias quaerat odit numquam voluptate! Officiis, culpa at.
-    Eius, fuga consequuntur, odio debitis exercitationem enim dolore officiis possimus delectus dignissimos ipsum laboriosam impedit fugiat vel sequi quas esse eos obcaecati est corporis. Aliquid provident accusamus pariatur ullam consequuntur.
-    Iusto non itaque incidunt vel ipsa saepe consequuntur sapiente laborum nobis, illo dolorum mollitia voluptas ullam commodi culpa officiis eaque nihil aliquam quidem praesentium accusamus autem deleniti impedit? Maiores, sapiente!
-    Ratione ipsum fuga, quis tempore cupiditate modi accusantium, numquam maxime quisquam architecto voluptatem repellendus eaque, nobis expedita. Dolorem laborum quaerat id illo corporis, neque suscipit harum, laudantium aspernatur cumque saepe!
-    </aside>
-    </section>
-</section>
-
-
-<!-- Footer section -->
-<footer class="bg-neutral-200 p-2">
-    <div class="border w-80 bg-white rounded p-2">
-        <img src="ee.jpg" alt="this is image" class="h-40 w-full object-cover aspect-video rounded border">
-    <h3 class='pt-2 text-sm font-semibold line-clamp-2'>kuhfghghfgfdggkdjgdghhdkgfhkifdjgkijthis is the title of the image</h3>
-    <p class="flex justify-between text-[10px] text-neutral-400">chai <span>12 minutes ago</span></p>
-    </div>
-</footer>
-
-
-
 
 {% endblock %}

@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<body class="bg-red-50 text-gray-800 font-sans">
+
+    <div class="mx-auto">
+
+        <!-- Page Heading -->
+        <h1 class="text-4xl font-extrabold text-red-600 mb-6 tracking-tight">Contact | Blogify</h1>
+
+        <!-- About Us / Contact Description -->
+        <p class="text-lg leading-relaxed mb-6">
+            {% if title == "About Us" %}
+                Welcome to <span class="font-semibold text-red-700">Blogify</span>, your go-to destination for professional insights, latest trends, and thoughtfully crafted articles. Our mission is to provide high-quality content with clarity, depth, and relevance. At Blogify, we prioritize accuracy, engagement, and meaningful storytelling to enrich your reading experience.
+            {% elif title == "Contact Us" %}
+                We value your feedback, questions, and ideas. Reach out to <span class="font-semibold text-red-700">Blogify</span> using the form below or through the provided contact information. Your messages help us improve and deliver the best content possible.
+            {% endif %}
+        </p>
+
+        <!-- Contact Form Only -->
+        {% if title == "Contact Us" %}
+        <form class="mt-8 space-y-4 bg-white p-6 rounded shadow-md">
+            <input type="text" name="name" placeholder="Your Name" class="w-full border border-red-300 rounded p-2 focus:ring-2 focus:ring-red-400 focus:outline-none">
+            <input type="email" name="email" placeholder="Your Email" class="w-full border border-red-300 rounded p-2 focus:ring-2 focus:ring-red-400 focus:outline-none">
+            <textarea name="message" placeholder="Your Message" class="w-full border border-red-300 rounded p-2 focus:ring-2 focus:ring-red-400 focus:outline-none"></textarea>
+            <button type="submit" class="bg-red-600 text-white font-semibold px-6 py-2 rounded hover:bg-red-700 transition-colors duration-200">
+                Send Message
+            </button>
+        </form>
+
+        <!-- Contact Details -->
+        <div class="mt-6 text-gray-700">
+            <p><span class="font-semibold">Email:</span> contact@blogify.com</p>
+            <p><span class="font-semibold">Phone:</span> +1 234 567 890</p>
+            <p><span class="font-semibold">Address:</span> 123 Red Street, Metropolis, Country</p>
+        </div>
+        {% endif %}
+
+    </div>
+
+</body>
+
+{% endblock %}

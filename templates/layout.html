@@ -1,76 +1,83 @@
-{% load static %}
+{% load static tailwind_tags%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Django Blog</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
-        
-        .scrolling::-webkit-scrollbar{
+        .scrolling::-webkit-scrollbar {
             display: none;
         }
     </style>
+    {% tailwind_css %}
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-    <header class="w-full bg-white shadow px-2 py-3 lg:px-40 flex justify-between items-center gap-4 sticky top-0 left-0">
-        <a href="/" class="font-bold text-lg sm:text-xl md:text-2xl underline">Blog<span class="font-extrabold text-red-600">ify</span></a>
-        
-        <form method="POST" class="max-w-5xl w-[50%] flex items-center rounded border border-r-0">
-            <input type="text" placeholder="Search here" class="w-full text-xs sm:text-sm md:text-md p-2 rounded outline-0 border-0">
+    <!-- Header -->
+    <header class="w-full bg-white shadow px-2 py-3 lg:px-40 flex justify-between items-center gap-4 sticky top-0 left-0 z-50">
+        <a href="/" class="font-bold text-lg sm:text-xl md:text-2xl underline">
+            Blog<span class="font-extrabold text-red-600">ify</span>
+        </a>
+
+        <form action="{% url 'search' %}" method="GET" 
+        class="max-w-5xl w-[50%] flex items-center rounded border border-r-0">
+            <input type="text" placeholder="Enter search here"  name='keyword' value="{{keyword}}" class="w-full text-xs sm:text-sm md:text-md p-2 rounded outline-0 border-0">
             <button type="submit" class="bg-red-600 text-white rounded-r-md p-2 text-xs sm:text-sm md:text-md">Search</button>
         </form>
 
-        <button class="p-2 bg-red-600 hover:bg-red-700 hover:cursor-pointer text-white rounded text-xs sm:text-sm md:text-md relative menubtn">Menu</button>
-    
+        <button class="p-2 bg-red-600 hover:bg-red-700 text-white rounded text-xs sm:text-sm md:text-md relative menubtn">
+            Menu
+        </button>
     </header>
-    <!-- Navbar -->
-     <nav class="md:mx-30 bg-white flex-col gap-5 p-2 w-60  border absolute top-15 right-1 rounded navbar hidden">
-        <a href="#" class="font-semibold transition-all duration-200 hover:text-red-700 hover:translate-x-2 hover:underline">Account</a>
-        <a href="#" class="font-semibold transition-all duration-200 hover:text-red-700 hover:translate-x-2 hover:underline">My Blogs</a>
-        <a href="#" class="font-semibold transition-all duration-200 hover:text-red-700 hover:translate-x-2 hover:underline">Logout</a>
-     </nav>
+
+    
+    <nav class="navbar hidden fixed top-15 right-2 max-w-50 w-full bg-white rounded flex flex-col gap-2 p-3 z-60 shadow-lg">
+        <a href="#" class="font-semibold transform transition duration-200 hover:text-red-700 hover:translate-x-2 hover:underline">Account</a>
+        <a href="#" class="font-semibold transform transition duration-200 hover:text-red-700 hover:translate-x-2 hover:underline">My Blogs</a>
+        <a href="about/" class="font-semibold transform transition duration-200 hover:text-red-700 hover:translate-x-2 hover:underline">About us </a>
+        <a href="contact/" class="font-semibold transform transition duration-200 hover:text-red-700 hover:translate-x-2 hover:underline">Contact us</a>
+        <a href="#" class="font-semibold transform transition duration-200 hover:text-red-700 hover:translate-x-2 hover:underline">Logout</a>
+    </nav>
 
 
     <div class="p-2 flex gap-4 justify-center overflow-x-auto bg-red-700 text-white scrolling">
         {% for cat in categories %}
-            <a href="{% url 'posts_by_category' cat.id %}" class="text-[10px] sm:text-sm font-medium transition-colors hover:text-gray-200">
+            <a href="{% url 'posts_by_category' cat.id %}" class="text-[10px] sm:text-sm font-medium transition-colors hover:text-gray-200  whitespace-nowrap">
                 {{ cat.category_name }}
             </a>
         {% endfor %}
-        </div>
+    </div>
 
     <!-- Main content -->
-    <main class="max-w-5xl min-h-screen bg-white mx-auto p-1 sm:p-3">
+    <main class="max-w-7xl min-h-screen bg-white mx-auto p-2 sm:p-3">
         {% block content %}{% endblock %}
     </main>
 
 
-
-    <footer class="bg-black text-white p-4">
-        <p class="text-center md:text-lg transition-all duration-100 hover:underline">&copy; 2026 All rights are reserved.</p>
+    <footer class="bg-black text-white p-4 mt-8">
+        <p class="text-center md:text-lg transition-all duration-100 hover:underline">
+            &copy; 2026 All rights are reserved.
+        </p>
     </footer>
 
-
-    <script>
-        let navbar = document.querySelector(".navbar")
-        let menBtn = document.querySelector(".menubtn")
+    
+     <script>
+        const navbar = document.querySelector(".navbar");
+        const menBtn = document.querySelector(".menubtn");
 
         menBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            navbar.classList.toggle('hidden')
-            navbar.classList.toggle('flex')
-        })
+            navbar.classList.toggle('hidden');    
+        });
 
         navbar.addEventListener('click', (e) => {
             e.stopPropagation();
-        })
+        });
 
         document.addEventListener('click', () => {
-            navbar.classList.add('hidden')
-        })
+            navbar.classList.add('hidden');
+        });
     </script>
 
 </body>

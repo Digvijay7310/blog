@@ -5,4 +5,6 @@ from . import views
 urlpatterns = [
     path('<int:category_id>/', views.posts_by_category , name="posts_by_category"),
     path('<slug:slug>/', views.blog_detail , name="blog_detail"),
+    # Search endpoint
+    path('blogs/search/', views.search, name='search')
 ]
