@@ -19,6 +19,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from . import views
+from blogs import views as BlogView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +27,10 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
     path('category/', include('blogs.urls')),
+    path('blogs/<slug:slug>/', BlogView.blog_detail , name="blog_detail"),
+    path('register/', views.register, name='register'),
+    path('login/', views.login, name='login'),
+    path('logout/', views.logout, name='logout'),
 
     path("__reload__/", include("django_browser_reload.urls")),
 ]

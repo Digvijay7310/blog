@@ -2,32 +2,38 @@
 
 {% block content %}
 
-{% if posts %}
-<h3 class="text-center font-semibold m-2">Blogs in <span class="text-red-600">{{posts.first.category.category_name}} </span></h3>
+<h3 class="text-center font-semibold m-2">
+    Blogs in 
+    {% if posts.first %}
+        <span class="text-red-600">{{ posts.first.category.category_name }}</span>
+    {% else %}
+        <span class="text-red-600">Unknown Category</span>
+    {% endif %}
+</h3>
+
 <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
     {% for post in posts %}
-    <a href={% url 'blog_detail' post.slug %} class=" p-2 rounded bg-white shadow hover:shadow-lg transition">
-        {% if post.featured_image %}
-        <img src="{{ post.featured_image.url }}" alt="{{ post.title|default:'Post Image' }}" class="h-40 w-full object-cover rounded">
-        {% else %}
-        <div class="h-40 w-full bg-gray-200 rounded flex items-center justify-center text-gray-500 text-xs">
-            No Image
-        </div>
-        {% endif %}
+        <a href="{% url 'blog_detail' post.slug %}" class="p-2 rounded bg-white shadow hover:shadow-lg transition">
+            {% if post.featured_image %}
+                <img src="{{ post.featured_image.url }}" alt="{{ post.title|default:'Post Image' }}" class="h-40 w-full object-cover rounded">
+            {% else %}
+                <div class="h-40 w-full bg-gray-200 rounded flex items-center justify-center text-gray-500 text-xs">
+                    No Image
+                </div>
+            {% endif %}
 
-        <div class="pt-3">
-            <h2 class="font-semibold text-xs mb-1 line-clamp-3">{{ post.title|default:"Untitled Post" }}</h2>
-            <div class="flex justify-between gap-6">
-                <h4 class="text-gray-500 text-[10px]">{{ post.author|default:"Unknown" }}</h4>
-                <span class="text-gray-500 text-[10px]">{{ post.created_at|timesince|default:"N/A" }}</span>
+            <div class="pt-3">
+                <h2 class="font-semibold text-xs mb-1 line-clamp-3">{{ post.title|default:"Untitled Post" }}</h2>
+                <div class="flex justify-between gap-6">
+                    <h4 class="text-gray-500 text-[10px]">{{ post.author|default:"Unknown" }}</h4>
+                    <span class="text-gray-500 text-[10px]">{{ post.created_at|timesince|default:"N/A" }}</span>
+                </div>
             </div>
-        </div>
-    </a>
+        </a>
     {% empty %}
-    <p class="col-span-3 text-center text-red-600">No posts found in this category.</p>
+        <p class="col-span-2 md:col-span-4 text-center text-red-600">No posts found in this category.</p>
     {% endfor %}
 </div>
 
-{% endif %}
 
 {% endblock %}

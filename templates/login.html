@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="flex justify-center items-center bg-gray-100 py-10">
+    <div class="w-full max-w-md bg-white rounded-lg shadow p-6">
+
+        <h2 class="text-2xl font-semibold text-center mb-6">
+            Login to Account
+        </h2>
+
+        {% if form.non_field_errors %}
+            <div class="mb-4 text-sm text-red-600">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'login' %}"
+              class="space-y-4
+              [&_input]:w-full
+              [&_input]:px-3
+              [&_input]:py-2
+              [&_input]:border
+              [&_input]:border-gray-300
+              [&_input]:rounded
+              [&_input]:focus:outline-none
+              [&_input]:focus:ring-2
+              [&_input]:focus:ring-green-500">
+
+            {% csrf_token %}
+
+            <!-- Username -->
+            <div>
+                <label class="block text-sm mb-1">Username</label>
+                {{ form.username }}
+                {% for error in form.username.errors %}
+                    <p class="text-xs text-red-600">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <!-- Password -->
+            <div>
+                <label class="block text-sm mb-1">Password</label>
+                {{ form.password }}
+                {% for error in form.password.errors %}
+                    <p class="text-xs text-red-600">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <button type="submit"
+                class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">
+                Login
+            </button>
+        </form>
+
+        <p class="text-center text-sm mt-4">
+            Don’t have an account?
+            <a href="{% url 'register' %}" class="text-green-600 hover:underline">
+                Register
+            </a>
+        </p>
+
+    </div>
+</section>
+{% endblock %}

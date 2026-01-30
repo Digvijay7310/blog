@@ -12,7 +12,7 @@
     </style>
     {% tailwind_css %}
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-100 text-gray-800">
 
     <!-- Header -->
     <header class="w-full bg-white shadow px-2 py-3 lg:px-40 flex justify-between items-center gap-4 sticky top-0 left-0 z-50">
@@ -26,18 +26,36 @@
             <button type="submit" class="bg-red-600 text-white rounded-r-md p-2 text-xs sm:text-sm md:text-md">Search</button>
         </form>
 
+        {% if not user.is_authenticated %}
+        <div>
+        <a href="{% url 'login' %}" class="bg-red-600 p-2 sm:text-lg text-white text-[10px]">Login</a>
+        <a href="{% url 'register' %}" class="bg-red-600 p-2 sm:text-lg text-white text-[10px]">Register</a>
+        </div>
+        {% else %}
         <button class="p-2 bg-red-600 hover:bg-red-700 text-white rounded text-xs sm:text-sm md:text-md relative menubtn">
             Menu
         </button>
+        {% endif %}
     </header>
 
     
     <nav class="navbar hidden fixed top-15 right-2 max-w-50 w-full bg-white rounded flex flex-col gap-2 p-3 z-60 shadow-lg">
-        <a href="#" class="font-semibold transform transition duration-200 hover:text-red-700 hover:translate-x-2 hover:underline">Account</a>
+       
+        {% if not user.is_authenticated %}
+        <a href="{% url 'register' %}" class="font-semibold transform transition duration-200 hover:text-red-700 hover:translate-x-2 hover:underline">Register</a>
+        <a href="{% url 'login' %}" class="font-semibold transform transition duration-200 hover:text-red-700 hover:translate-x-2 hover:underline">login</a>
+        {% else %}
+        <span class="text-xs text-center bg-blue-50 text-blue-950 hover:underline">Hi, "{{user}}"</span>
+         <a href="#" class="font-semibold transform transition duration-200 hover:text-red-700 hover:translate-x-2 hover:underline">Account</a>
         <a href="#" class="font-semibold transform transition duration-200 hover:text-red-700 hover:translate-x-2 hover:underline">My Blogs</a>
-        <a href="about/" class="font-semibold transform transition duration-200 hover:text-red-700 hover:translate-x-2 hover:underline">About us </a>
-        <a href="contact/" class="font-semibold transform transition duration-200 hover:text-red-700 hover:translate-x-2 hover:underline">Contact us</a>
-        <a href="#" class="font-semibold transform transition duration-200 hover:text-red-700 hover:translate-x-2 hover:underline">Logout</a>
+         <a href="{% url 'about'%}" class="font-semibold transform transition duration-200 hover:text-red-700 hover:translate-x-2 hover:underline">About us </a>
+        <a href="{%url 'contact' %}" class="font-semibold transform transition duration-200 hover:text-red-700 hover:translate-x-2 hover:underline">Contact us</a>
+        <span class="bg-red-600 text-white p-1 rounded flex justify-center items-center"><a href="{% url 'logout' %}" class="font-semibold hover:underline">Logout</a></span>
+       
+        {% endif %}
+        
+        
+
     </nav>
 
 
@@ -50,18 +68,21 @@
     </div>
 
     <!-- Main content -->
-    <main class="max-w-7xl min-h-screen bg-white mx-auto p-2 sm:p-3">
+    <main class="max-w-6xl bg-white mx-auto min-h-screen p-0.5 sm:p-3">
         {% block content %}{% endblock %}
     </main>
 
 
-    <footer class="bg-black text-white p-4 mt-8">
+    <footer class="bg-black text-white p-4">
         <p class="text-center md:text-lg transition-all duration-100 hover:underline">
             &copy; 2026 All rights are reserved.
         </p>
     </footer>
 
     
+     {% if not user.is_authenticated %}
+       <script></script>
+     {% else %}
      <script>
         const navbar = document.querySelector(".navbar");
         const menBtn = document.querySelector(".menubtn");
@@ -79,6 +100,7 @@
             navbar.classList.add('hidden');
         });
     </script>
+     {% endif %}
 
 </body>
 </html>
