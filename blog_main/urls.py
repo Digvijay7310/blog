@@ -26,11 +26,16 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
+
+    # Blogs
     path('category/', include('blogs.urls')),
     path('blogs/<slug:slug>/', BlogView.blog_detail , name="blog_detail"),
     path('register/', views.register, name='register'),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
+
+    # Dashboard
+    path('dashboard/', include('dashboard.urls')),
 
     path("__reload__/", include("django_browser_reload.urls")),
 ]

@@ -5,8 +5,8 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import auth
 
 def home(request):
-    featured_post = Blog.objects.filter(is_featured=True, status='Publish').order_by("updated_at")
-    posts = Blog.objects.filter(is_featured=False, status='Publish')
+    featured_post = Blog.objects.filter(is_featured=True, status='Publish').order_by("-updated_at")[:7]
+    posts = Blog.objects.filter(is_featured=False, status='Publish').order_by("-updated_at")
     categories = Category.objects.all()  # include categories for navbar
 
     context = {
